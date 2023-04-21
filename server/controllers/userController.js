@@ -86,35 +86,29 @@ module.exports.editUser = async (req, res, next) => {
   const { email, username, password } = req.body;
   const bcryptedPass = await bcrypt.hash(password, 10);
   try {
-    if (!username) {
-      const validate = await User.findById({ _id: req.params.id });
-      const user = await User.findByIdAndUpdate(
-        { _id: req.params.id },
-        { email, username: validate.username, password: bcryptedPass }
-      );
-      return res.json({ user, status: true });
+    let userToUpdate = {
+      email: email || "",
+      username: username || "",
+      password: bcryptedPass || "",
+    };
+
+    // Check if any field is empty
+    if (!email || !username || !password) {
+      const currentUser = await User.findById(req.params.id);
+      userToUpdate = {
+        email: email || currentUser.email,
+        username: username || currentUser.username,
+        password: bcryptedPass || currentUser.password,
+      };
     }
-    if (!password) {
-      const validate = await User.findById({ _id: req.params.id });
-      const user = await User.findByIdAndUpdate(
-        { _id: req.params.id },
-        { email, username, password: validate.password }
-      );
-      return res.json({ user, status: true });
-    }
-    if (!email) {
-      const validate = await User.findById({ _id: req.params.id });
-      const user = await User.findByIdAndUpdate(
-        { _id: req.params.id },
-        { email: validate.email, username, password: bcryptedPass }
-      );
-      return res.json({ user, status: true });
-    }
-    const user = await User.findByIdAndUpdate(
+
+    const updatedUser = await User.findByIdAndUpdate(
       { _id: req.params.id },
-      { email, username, password: bcryptedPass }
+      userToUpdate,
+      { new: true }
     );
-    return res.json({ user, status: true });
+
+    return res.json({ users: updatedUser, status: true });
   } catch (ex) {
     next(ex);
   }
