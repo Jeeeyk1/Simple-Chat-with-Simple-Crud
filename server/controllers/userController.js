@@ -84,7 +84,7 @@ module.exports.getAllUsers = async (req, res, next) => {
 };
 module.exports.editUser = async (req, res, next) => {
   const { email, username, password } = req.body;
-  const bcryptedPass = bcrypt.hash(password, 10);
+  const bcryptedPass = await bcrypt.hash(password, 10);
   try {
     if (!username) {
       const validate = await User.findById({ _id: req.params.id });
@@ -92,7 +92,7 @@ module.exports.editUser = async (req, res, next) => {
         { _id: req.params.id },
         { email, username: validate.username, password: bcryptedPass }
       );
-      return res.json({ users, status: true });
+      return res.json({ user, status: true });
     }
     if (!password) {
       const validate = await User.findById({ _id: req.params.id });
@@ -100,7 +100,7 @@ module.exports.editUser = async (req, res, next) => {
         { _id: req.params.id },
         { email, username, password: validate.password }
       );
-      return res.json({ users, status: true });
+      return res.json({ user, status: true });
     }
     if (!email) {
       const validate = await User.findById({ _id: req.params.id });
@@ -108,13 +108,13 @@ module.exports.editUser = async (req, res, next) => {
         { _id: req.params.id },
         { email: validate.email, username, password: bcryptedPass }
       );
-      return res.json({ users, status: true });
+      return res.json({ user, status: true });
     }
-    const users = await User.findByIdAndUpdate(
+    const user = await User.findByIdAndUpdate(
       { _id: req.params.id },
       { email, username, password: bcryptedPass }
     );
-    return res.json({ users, status: true });
+    return res.json({ user, status: true });
   } catch (ex) {
     next(ex);
   }

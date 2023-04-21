@@ -8,7 +8,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f9f9f9;
+  background-color: #61a8fc;
 `;
 
 const Title = styled.h1`
@@ -26,17 +26,21 @@ const Subtitle = styled.h2`
 `;
 
 const Button = styled.button`
-  background-color: #4e0eff;
+  background-color: #3c0ca0;
   color: white;
-  padding: 1.5rem 3rem;
+  padding: 1.2rem 3rem;
   border: none;
   font-weight: bold;
   cursor: pointer;
-  border-radius: 0.4rem;
-  font-size: 1.5rem;
+  border-radius: 1.2rem;
+  font-size: 1.6rem;
   text-transform: uppercase;
+  transition: all 0.3s ease-in-out;
   &:hover {
-    background-color: #3c0ca0;
+    background-color: #fff;
+    color: #3c0ca0;
+    transform: translateY(-2px);
+    box-shadow: 0px 2px 8px rgba(60, 12, 160, 0.5);
   }
 `;
 

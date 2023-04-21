@@ -44,9 +44,6 @@ export default function Contacts({ contacts, changeChat }) {
         toastOptions
       );
       return false;
-    } else if (email === "") {
-      toast.error("Email is required.", toastOptions);
-      return false;
     }
 
     return true;
@@ -67,6 +64,7 @@ export default function Contacts({ contacts, changeChat }) {
     fetctData();
   }, []);
   const updateSubmit = async (event) => {
+    event.preventDefault();
     if (handleValidation()) {
       const { email, username, password } = values;
       const { data } = await axios.put(
