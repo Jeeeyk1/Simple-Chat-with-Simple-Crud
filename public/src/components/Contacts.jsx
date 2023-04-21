@@ -32,13 +32,13 @@ export default function Contacts({ contacts, changeChat }) {
   };
   const handleValidation = () => {
     const { password, username, email } = values;
-    if (username.length < 3) {
+    if (username && username.length < 3) {
       toast.error(
         "Username should be greater than 3 characters.",
         toastOptions
       );
       return false;
-    } else if (password.length < 8) {
+    } else if (password && password.length < 8) {
       toast.error(
         "Password should be equal or greater than 8 characters.",
         toastOptions
@@ -65,6 +65,8 @@ export default function Contacts({ contacts, changeChat }) {
   }, []);
   const updateSubmit = async (event) => {
     event.preventDefault();
+
+    console.log(handleValidation());
     if (handleValidation()) {
       const { email, username, password } = values;
       const { data } = await axios.put(
@@ -82,6 +84,7 @@ export default function Contacts({ contacts, changeChat }) {
       if (data.status === true) {
         alert("Profile Updated Successfully");
         navigate("/chat");
+        console.log(data.users.username);
         setCurrentUserName(data.users.username);
         setIsFormVisible(false);
       }
@@ -163,7 +166,7 @@ export default function Contacts({ contacts, changeChat }) {
               <div className="form-overlay">
                 <div className="form-container">
                   <button onClick={handleHideForm}>Close Form</button>
-                  <form>
+                  <form onSubmit={handleValidation}>
                     {" "}
                     <input
                       type="text"
